@@ -1,0 +1,658 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的个人主页</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        /* 导航栏 */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            height: 60px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #2563eb;
+        }
+
+        /* 移动端菜单 */
+        .menu-toggle {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .menu-toggle span {
+            width: 25px;
+            height: 3px;
+            background: #333;
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+
+        /* 英雄区域 */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 80px 20px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        .hero-content h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            animation: fadeInUp 0.8s ease;
+        }
+
+        .hero-content p {
+            font-size: 1.25rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            animation: fadeInUp 0.8s ease 0.2s both;
+        }
+
+        .hero-btn {
+            display: inline-block;
+            padding: 12px 32px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            animation: fadeInUp 0.8s ease 0.4s both;
+        }
+
+        .hero-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 通用区块 */
+        section {
+            padding: 80px 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2rem;
+            margin-bottom: 3rem;
+            color: #1f2937;
+        }
+
+        /* 关于我 */
+        .about {
+            background: white;
+        }
+
+        .about-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: center;
+        }
+
+        .about-text p {
+            margin-bottom: 1rem;
+            color: #4b5563;
+            font-size: 1.05rem;
+        }
+
+        .about-image {
+            width: 100%;
+            height: 300px;
+            background: linear-gradient(135deg, #e0e7ff, #c7d2fe);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+        }
+
+        /* 项目卡片 */
+        .projects {
+            background: #f8f9fa;
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .project-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.12);
+        }
+
+        .project-img {
+            height: 180px;
+            background: linear-gradient(135deg, #a5b4fc, #818cf8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .project-info {
+            padding: 1.5rem;
+        }
+
+        .project-info h3 {
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+
+        .project-info p {
+            color: #6b7280;
+            font-size: 0.95rem;
+        }
+
+        /* 联系方式 */
+        .contact {
+            background: white;
+            text-align: center;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+        }
+
+        .contact-item {
+            padding: 1rem 2rem;
+            background: #f3f4f6;
+            border-radius: 10px;
+            text-decoration: none;
+            color: #374151;
+            transition: all 0.3s;
+        }
+
+        .contact-item:hover {
+            background: #2563eb;
+            color: white;
+        }
+
+        /* 页脚 */
+        footer {
+            background: #1f2937;
+            color: #9ca3af;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        /* 音乐播放器 */
+        .music-player {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 12px 16px;
+            border-radius: 50px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 999;
+            transition: all 0.3s;
+        }
+
+        .music-btn {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: none;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            transition: transform 0.2s;
+        }
+
+        .music-btn:hover {
+            transform: scale(1.1);
+        }
+
+        .music-info {
+            font-size: 0.85rem;
+            color: #4b5563;
+            max-width: 120px;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .music-visualizer {
+            display: flex;
+            align-items: center;
+            gap: 3px;
+            height: 20px;
+        }
+
+        .music-bar {
+            width: 3px;
+            background: #667eea;
+            border-radius: 2px;
+            animation: soundWave 0.8s ease-in-out infinite;
+        }
+
+        .music-bar:nth-child(1) { animation-delay: 0s; height: 8px; }
+        .music-bar:nth-child(2) { animation-delay: 0.1s; height: 16px; }
+        .music-bar:nth-child(3) { animation-delay: 0.2s; height: 12px; }
+        .music-bar:nth-child(4) { animation-delay: 0.3s; height: 18px; }
+        .music-bar:nth-child(5) { animation-delay: 0.4s; height: 10px; }
+
+        .music-visualizer.paused .music-bar {
+            animation-play-state: paused;
+        }
+
+        @keyframes soundWave {
+            0%, 100% { transform: scaleY(1); }
+            50% { transform: scaleY(0.5); }
+        }
+
+        /* 首次访问提示遮罩 */
+        .music-mask {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+        }
+
+        .music-mask.active {
+            display: flex;
+        }
+
+        .music-mask-content {
+            background: white;
+            padding: 2rem 3rem;
+            border-radius: 16px;
+            text-align: center;
+            max-width: 320px;
+        }
+
+        .music-mask-content h3 {
+            margin-bottom: 0.5rem;
+            color: #1f2937;
+        }
+
+        .music-mask-content p {
+            color: #6b7280;
+            margin-bottom: 1.5rem;
+            font-size: 0.95rem;
+        }
+
+        .start-btn {
+            padding: 12px 32px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+
+        .start-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* 响应式适配 */
+        @media (max-width: 768px) {
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                right: -100%;
+                width: 70%;
+                height: calc(100vh - 60px);
+                background: white;
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1.5rem;
+                transition: right 0.3s;
+                box-shadow: -5px 0 15px rgba(0, 0, 0, 0.1);
+            }
+
+            .nav-links.active {
+                right: 0;
+            }
+
+            .menu-toggle {
+                display: flex;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .hero-content p {
+                font-size: 1rem;
+            }
+
+            .about-content {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .about-image {
+                order: -1;
+                height: 250px;
+            }
+
+            .section-title {
+                font-size: 1.5rem;
+            }
+
+            section {
+                padding: 60px 20px;
+            }
+
+            .music-player {
+                bottom: 15px;
+                right: 15px;
+                padding: 10px 14px;
+            }
+
+            .music-info {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 音乐遮罩（解决浏览器自动播放限制） -->
+    <div class="music-mask" id="musicMask">
+        <div class="music-mask-content">
+            <h3>🎵 欢迎来到我的主页</h3>
+            <p>点击下方按钮开启背景音乐</p>
+            <button class="start-btn" onclick="startMusic()">进入主页</button>
+        </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <nav>
+        <div class="nav-container">
+            <div class="logo">MyPortfolio</div>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#home">首页</a></li>
+                <li><a href="#about">关于我</a></li>
+                <li><a href="#projects">作品</a></li>
+                <li><a href="#contact">联系</a></li>
+            </ul>
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 英雄区域 -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>你好，我是 XXX</h1>
+            <p>一名热爱创造的开发者 / 设计师</p>
+            <a href="#about" class="hero-btn">了解更多</a>
+        </div>
+    </section>
+
+    <!-- 关于我 -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2 class="section-title">关于我</h2>
+            <div class="about-content">
+                <div class="about-image">👨‍💻</div>
+                <div class="about-text">
+                    <p>欢迎来到我的个人主页！我是一名充满热情的创作者，专注于 Web 开发与设计。</p>
+                    <p>我喜欢探索新技术，用代码构建有趣且实用的产品，相信好的设计能让技术更有温度。</p>
+                    <p>闲暇时我喜欢听音乐、阅读和摄影，也会在博客分享技术心得与生活感悟。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 作品展示 -->
+    <section class="projects" id="projects">
+        <div class="container">
+            <h2 class="section-title">我的作品</h2>
+            <div class="project-grid">
+                <div class="project-card">
+                    <div class="project-img">🚀</div>
+                    <div class="project-info">
+                        <h3>项目一</h3>
+                        <p>这是一个简洁优雅的 Web 应用，专注于用户体验与性能优化。</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-img">🎨</div>
+                    <div class="project-info">
+                        <h3>项目二</h3>
+                        <p>创意设计作品，融合了现代美学与交互设计理念。</p>
+                    </div>
+                </div>
+                <div class="project-card">
+                    <div class="project-img">💡</div>
+                    <div class="project-info">
+                        <h3>项目三</h3>
+                        <p>开源工具项目，帮助开发者提升工作效率。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 联系方式 -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title">联系我</h2>
+            <p style="color: #6b7280; text-align: center;">欢迎通过以下方式与我取得联系</p>
+            <div class="contact-links">
+                <a href="mailto:your@email.com" class="contact-item">📧 邮箱</a>
+                <a href="https://github.com/yourname" target="_blank" class="contact-item">🐙 GitHub</a>
+                <a href="#" class="contact-item">💬 微信</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 页脚 -->
+    <footer>
+        <p>© 2024 My Portfolio. Made with ❤️</p>
+    </footer>
+
+    <!-- 音乐播放器 -->
+    <div class="music-player">
+        <button class="music-btn" id="musicBtn" onclick="toggleMusic()">▶</button>
+        <div class="music-visualizer paused" id="visualizer">
+            <div class="music-bar"></div>
+            <div class="music-bar"></div>
+            <div class="music-bar"></div>
+            <div class="music-bar"></div>
+            <div class="music-bar"></div>
+        </div>
+        <div class="music-info">背景音乐</div>
+    </div>
+
+    <!-- 背景音乐（已修复闭合标签） -->
+    <audio id="bgMusic" loop>
+        <source src="music" type="audio/mpeg">
+
+
+    <script>
+        const audio = document.getElementById('bgMusic');
+        const musicBtn = document.getElementById('musicBtn');
+        const visualizer = document.getElementById('visualizer');
+        const musicMask = document.getElementById('musicMask');
+        const navLinks = document.getElementById('navLinks');
+
+        let isPlaying = false;
+
+        // 尝试自动播放
+        function tryAutoPlay() {
+            const promise = audio.play();
+
+            if (promise !== undefined) {
+                promise.then(() => {
+                    // 自动播放成功
+                    isPlaying = true;
+                    updateMusicUI();
+                }).catch(() => {
+                    // 自动播放被浏览器阻止，显示遮罩
+                    musicMask.classList.add('active');
+                });
+            }
+        }
+
+        // 用户点击后开始播放
+        function startMusic() {
+            musicMask.classList.remove('active');
+            audio.play();
+            isPlaying = true;
+            updateMusicUI();
+        }
+
+        // 切换播放/暂停
+        function toggleMusic() {
+            if (isPlaying) {
+                audio.pause();
+                isPlaying = false;
+            } else {
+                audio.play();
+                isPlaying = true;
+            }
+            updateMusicUI();
+        }
+
+        // 更新播放器UI
+        function updateMusicUI() {
+            if (isPlaying) {
+                musicBtn.textContent = '❚❚';
+                visualizer.classList.remove('paused');
+            } else {
+                musicBtn.textContent = '▶';
+                visualizer.classList.add('paused');
+            }
+        }
+
+        // 移动端菜单切换
+        function toggleMenu() {
+            navLinks.classList.toggle('active');
+        }
+
+        // 点击导航链接后关闭菜单
+        document.querySelectorAll('.nav-links a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('active');
+            });
+        });
+
+        // 页面加载完成后尝试自动播放
+        window.addEventListener('load', tryAutoPlay);
+
+        // 检测用户首次交互（兼容部分浏览器）
+        document.addEventListener('click', function firstClick() {
+            if (!isPlaying) {
+                audio.play().then(() => {
+                    isPlaying = true;
+                    updateMusicUI();
+                }).catch(() => {});
+            }
+            document.removeEventListener('click', firstClick);
+        }, { once: true });
+    </script>
+</body>
+</html>
